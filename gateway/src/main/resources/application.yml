@@ -1,0 +1,66 @@
+### https://github.com/babylikebird/Micro-Service-Skeleton ###
+server:
+  port: 81
+spring:
+  application:
+    name: api-gateway
+  profiles:
+    active: '@profiles.active@'
+  thymeleaf:
+    mode: HTML5
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: true
+    encoding: UTF-8
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 101MB
+      max-request-size: 101MB
+info:
+  version: '@project.version@'
+  info: '@project.description@'
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://mno:immno@localhost:8761/eureka/
+### 还有zuul.host.connect-timeout-millis， zuul.host.socket-timeout-millis这两个配置， ###
+### 这两个和上面的ribbon都是配超时的。区别在于，如果路由方式是serviceId的方式，那么ribbon的生效， ###
+### 如果是url的方式，则zuul.host开头的生效。（此处重要！使用serviceId路由和url路由是不一样的超时策略） ###
+zuul:
+  host:
+    connect-timeout-millis: 10000
+    socket-timeout-millis: 60000
+  ignored-services: '*'
+  routes:
+    auth-server:
+      path: /uaa/**
+      serviceId: oauth2
+      sensitiveHeaders:
+  add-proxy-headers: true
+  add-host-header: true
+##默认情况下很多端点是不允许访问的，会返回401:Unauthorized
+management:
+  server:
+    add-application-context-header: false
+#######
+security:
+  oauth2:
+    sso:
+      login-path: /login
+    resource:
+      # 属性在 org.springframework.cloud.security.oauth2.client.OAuth2LoadBalancerClientAutoConfiguration中
+      loadBalanced: true
+      user-info-uri: http://oauth2/deny/user
+      prefer-token-info: false
+    client:
+      client-id: clientIdPassword
+      client-secret: $2a$10$apyFhRVQ4l8xCkb3HTJVM.StDi0oocNRFt8VnG4fJRH/3Sbpba8fS
+      # 配置网关全路径
+      user-authorization-uri: http://localhost:{server.port}/uaa/oauth/authorize
+      access-token-uri: http://localhost:{server.port}/uaa/oauth/token
+logging:
+  level:
+    org.springframework.security: debug

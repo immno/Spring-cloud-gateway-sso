@@ -1,0 +1,23 @@
+server:
+  port: 8001
+spring:
+  application:
+    name: oauth2
+  profiles:
+    active: '@profiles.active@'
+  thymeleaf:
+    prefix: classpath:/views/
+    suffix: .html
+    cache: true
+info:
+  version: '@project.version@'
+  info: '@project.description@'
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://mno:immno@localhost:8761/eureka/
+logging:
+  level:
+    org.springframework.security: debug

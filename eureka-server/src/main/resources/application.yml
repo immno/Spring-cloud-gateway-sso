@@ -1,0 +1,27 @@
+# http://www.troylc.cc/spring-cloud/2017/03/01/spirng-cloud-eureka.html
+server:
+  port: 8761
+spring:
+  application:
+    name: eureka-server
+  profiles:
+    active: '@profiles.active@'
+  security:
+    user:
+      name: mno
+      password: immno
+info:
+  version: '@project.version@'
+  info: '@project.description@'
+eureka:
+  server:
+    enable-self-preservation: false
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+    serviceUrl:
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@localhost:${server.port}/eureka/
+logging:
+  file: /mnt/web/logs/${spring.application.name}.log
+  level:
+    root: info
