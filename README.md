@@ -2,15 +2,6 @@
 An example of spring oauth2 authorization and resource server using Token.**Based on Finchley.SR2（Oauth 2.X）.** 
 [官方文档](https://cloud.spring.io/spring-cloud-static/Finchley.SR2/)
 
-## 使用
-所有请求都通过 `api-gateway`，包括`用户认证`，主要涉及三个方面：
-- 授权登录（oauth/authorize）  
-![配置](img/authorize_cofig.png)  
-请求[http://localhost:8001/oauth/authorize?client_id=client&response_type=code&redirect_uri=http://www.baidu.com
-](http://localhost:8001/oauth/authorize?client_id=client&response_type=code&redirect_uri=http://www.baidu.com)  
-如果没有登录，会跳转到登录页面（`/oauth/login`）
-
-
 ## Eureka-server:服务发现
 1. 为了安全设置了密码，基于`HttpBasic`认证（mno:immno），在`application.yml`设置
 2. `Finchley.SR2`版本特性，需要添加一个`WebSecurityConfigurerAdapter`配置,[官方说明](https://cloud.spring.io/spring-cloud-static/Finchley.SR2/multi/multi_spring-cloud-eureka-server.html#_securing_the_eureka_server)
@@ -25,7 +16,9 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 }
 ```
-### Oauth操作（全程使用Token，不使用Session）
+## 使用
+
+### Auth-server微服务操作（全程使用Token，不使用Session）
 1. 获取`token`（携带请求头客户端凭证：`Authorization: Basic Y2xpZW50SWRQYXNzd29yZDpzZWNyZXQ=`，`new String(Base64Utils.encode(("clientIdPassword:secret").getBytes()))`）
 POST http://localhost:8001/oauth/token
 ```json
@@ -50,6 +43,16 @@ Authorization: Bearer e175f33b-e071-45d0-8819-284c7dd4e376
 // response headers
 Location:	http://www.baidu.com?code=94B3XO
 ```
+
+### Gateway网关操作（全程使用Token，不使用Session）
+所有请求都通过 `api-gateway`，包括`用户认证`，主要涉及三个方面：
+- 授权登录（oauth/authorize）  
+![配置](img/authorize_cofig.png)  
+请求[http://localhost:8001/oauth/authorize?client_id=client&response_type=code&redirect_uri=http://www.baidu.com
+](http://localhost:8001/oauth/authorize?client_id=client&response_type=code&redirect_uri=http://www.baidu.com)  
+如果没有登录，会跳转到登录页面（`/oauth/login`）
+
+
 ## 问题
 首先理解：
 - WebSecurityConfigurerAdapter  

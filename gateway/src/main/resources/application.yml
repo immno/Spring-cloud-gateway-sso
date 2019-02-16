@@ -59,8 +59,8 @@ security:
       client-id: clientIdPassword
       client-secret: $2a$10$apyFhRVQ4l8xCkb3HTJVM.StDi0oocNRFt8VnG4fJRH/3Sbpba8fS
       # 配置网关全路径
-      user-authorization-uri: http://localhost:{server.port}/uaa/oauth/authorize
-      access-token-uri: http://localhost:{server.port}/uaa/oauth/token
+      user-authorization-uri: http://localhost:8761/oauth/authorize
+      access-token-uri: http://localhost:8761/oauth/token
 logging:
   level:
     org.springframework.security: debug
